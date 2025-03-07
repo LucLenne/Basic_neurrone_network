@@ -1,19 +1,34 @@
 #include <iostream>
 #include <cmath>
 #include <array>
-//#include <Eigen>
-//#include <Eigen/Dense>
+#include <Eigen/Dense>
+#include <cstdlib>
+
+class Pixel 
+{
+public:
+	Eigen::Vector3d RandomPixel() 
+	{
+		srand(time(0));
+		return Eigen::Vector3d(rand() % 256, rand() % 256, rand() % 256);
+	}
+	bool IsGreen(Eigen::Vector3d pixel)
+	{
+
+	}
+};
 
 
 class Perceptron
 {
 private:
-	std::array<double, 3> weights = { 0.1 , 0.1 , 0.1 };
-	std::array<double, 3> entryMatrix;
+	Eigen::Vector3d entryMatrix;
+	Eigen::Vector3d weights = {0.1,0.1,0.1};
 
-	double VariableMultiplication()
+
+	double ScalarProduct()
 	{
-		return weights[0] * entryMatrix[0] + weights[1] * entryMatrix[1] + weights[2] * entryMatrix[2];
+		return entryMatrix.dot(weights);
 	}
 
 	bool ActivationFunction(double weightedSum)
@@ -22,14 +37,14 @@ private:
 	}
 
 public:
-	Perceptron(std::array<double, 3> entry)
+	Perceptron(Eigen::Vector3d entry)
 	{
 		entryMatrix = entry;
 	}
 
 	void Predict()
 	{
-		std::cout << ActivationFunction(VariableMultiplication());
+		std::cout << ActivationFunction(ScalarProduct());
 	}
 };
 
@@ -38,5 +53,7 @@ int main()
 {
 	Perceptron bGreen({ 0.1,0.5,0.9 });
 	bGreen.Predict();
+	Pixel pixel;
+	pixel.RandomPixel();
 }
 
