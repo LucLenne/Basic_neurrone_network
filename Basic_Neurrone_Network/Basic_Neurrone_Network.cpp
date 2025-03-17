@@ -1,16 +1,31 @@
 #include <iostream>
 #include <cmath>
 #include <array>
+#include <random>
 #include <Eigen/Dense>
 #include <cstdlib>
 
 class Pixel 
 {
 public:
-	Eigen::Vector3d RandomPixel() 
+
+	int RandomInt(int min, int max)
 	{
-		srand(time(0));
-		return Eigen::Vector3d(rand() % 256, rand() % 256, rand() % 256);
+		static std::random_device rd; 
+		static std::mt19937 gen(rd());
+		std::uniform_int_distribution<int> distrib(min, max);
+		return distrib(gen);
+	}
+
+	Eigen::Vector3d RandomNotGreenPixel() 
+	{
+		int r = RandomInt(0, 200);
+		int b = RandomInt(0, 200);
+
+		int gMax = std::min(r + 55, b + 55);
+		int g = RandomInt(0, gMax);
+
+		return Eigen::Vector3d(r, g, b);
 	}
 };
 
@@ -19,8 +34,7 @@ class Perceptron
 {
 private:
 	Pixel pixel;
-	Eigen::Vector3d entryMatrix;
-	Eigen::Vector3d weights = {0.1,0.1,0.1};
+	Eigen::Vector3d weights = Eigen::Vector3d::Random();;
 	double learningRate;
 	Eigen::Vector3d greenPixel = {0,255 ,0};
 
@@ -32,30 +46,28 @@ private:
 
 	bool ActivationFunction(double weightedSum)
 	{
-		return weightedSum > 0.8;
+		return weightedSum > 0.5;
 	}
 
 	void CalculateError() 
 	{
-		double error = ScalarProduct(greenPixel) - ScalarProduct(entryMatrix);
-		for (int i = 0 ; i < 3 ; i++) 
-		{
-			weights[i] += learningRate * error * entryMatrix[i];
-			std::cout << weights[i] << std::endl;
-		}
-		entryMatrix = NormalizeValueVector(pixel.RandomPixel());
+		Eigen::Vector3d greenPixelNormalized = NormalizeValueVector(greenPixel);
+		double error = 1 - ActivationFunction(ScalarProduct(greenPixelNormalized));
+		weights += learningRate * error * greenPixelNormalized;
+		//std::cout<<randomPixel;
 	}
 
-	Eigen::Vector3d NormalizeValueVector(Eigen::Vector3d vectorToNormalize)
+	Eigen::Vector3d NormalizeValueVector(Eigen::Vector3d VectorToNormalize)
 	{
-		return vectorToNormalize / 255;
+		return VectorToNormalize / 255;
 	}
+
 
 public:
 	Perceptron(float pLearningRate)
 	{
 		learningRate = pLearningRate;
-		greenPixel = NormalizeValueVector({ 0,255,0 });
+		greenPixel = NormalizeValueVector(greenPixel);
 	}
 
 	void TrainPerceptron(int numberIteration)
@@ -63,13 +75,6 @@ public:
 		for (int i = 0; i < numberIteration; i++) 
 		{
 			CalculateError();
-		}
-	}
-
-	void ResetWeights()
-	{
-		for (int i = 0; i < 2; i++) {
-			weights[i] = 0,1;
 		}
 	}
 
@@ -82,16 +87,17 @@ public:
 
 	bool Prediction(Eigen::Vector3d entry) 
 	{
-		return ActivationFunction(ScalarProduct(entry));
+		return ActivationFunction(ScalarProduct(NormalizeValueVector(entry)));
 	}
 };
 
 
 int main()
 {
+	srand(time(0));
 	Perceptron perceptron(0.01f);
-	perceptron.TrainPerceptron(100);
+	perceptron.TrainPerceptron(100000);
 	perceptron.PrintWeights();
-	std::cout << perceptron.Prediction({ 0,255,0 });
+	std::cout <<perceptron.Prediction({ 111,100,111 });
 }
 

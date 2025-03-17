@@ -112,7 +112,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\lucle\OneDrive - De Vinci\Documents\Fork\Basic_neurrone_network\lib\eigen-master</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\lucle\Documents\Basic_neurrone_network\lib\eigen-master</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
