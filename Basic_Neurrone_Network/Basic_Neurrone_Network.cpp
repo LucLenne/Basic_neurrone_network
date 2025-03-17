@@ -22,7 +22,7 @@ private:
 	Eigen::Vector3d entryMatrix;
 	Eigen::Vector3d weights = {0.1,0.1,0.1};
 	double learningRate;
-	Eigen::Vector3d greenPixel;
+	Eigen::Vector3d greenPixel = {0,255 ,0};
 
 
 	double ScalarProduct(Eigen::Vector3d entry)
@@ -66,9 +66,18 @@ public:
 		}
 	}
 
-	Eigen::Vector3d PrintWeights()
+	void ResetWeights()
 	{
-		return weights;
+		for (int i = 0; i < 2; i++) {
+			weights[i] = 0,1;
+		}
+	}
+
+	void PrintWeights()
+	{
+		std::cout << "w1 : " + std::to_string(weights[0]) << std::endl;
+		std::cout << "w2 : " + std::to_string(weights[1]) << std::endl;
+		std::cout << "w3 : " + std::to_string(weights[2]) << std::endl;
 	}
 
 	bool Prediction(Eigen::Vector3d entry) 
@@ -82,7 +91,7 @@ int main()
 {
 	Perceptron perceptron(0.01f);
 	perceptron.TrainPerceptron(100);
-	std::cout << perceptron.PrintWeights() << std::endl;
+	perceptron.PrintWeights();
 	std::cout << perceptron.Prediction({ 0,255,0 });
 }
 
