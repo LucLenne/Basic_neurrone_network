@@ -1,3 +1,0 @@
-﻿  Basic_Neurrone_Network.cpp
-C:\Users\lucle\Documents\Basic_neurrone_network\Basic_Neurrone_Network\Basic_Neurrone_Network.cpp(12,13): warning C4244: 'argument' : conversion de 'time_t' en 'unsigned int', perte possible de données
-  Basic_Neurrone_Network.vcxproj -> C:\Users\lucle\Documents\Basic_neurrone_network\x64\Debug\Basic_Neurrone_Network.exe
