@@ -47,7 +47,7 @@ private:
 	bool ActivationFunction(double weightedSum)
 	{
 		return weightedSum > 0.5;
-	}
+	} 
 
 	void CalculateError() 
 	{
